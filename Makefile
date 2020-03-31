@@ -6,7 +6,7 @@ CC_DEBUG_FLAGS=-g
 all: same
 
 src/parser.c: src/parser.y
-ifdef DEBUG
+ifdef YDEBUG
 	bison -d -o $@ $^ $(BISON_DEBUG_FLAGS)
 else
 	bison -d -o $@ $^

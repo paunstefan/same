@@ -11,28 +11,41 @@ extern FILE *yyin;
 /* GLOBALS */
 char **words = NULL;
 uint32_t wordc = 0;
+SAME_BOOL_T file_scanned = S_FALSE;
 
 /* FUNCTIONS */
 
 int main(int argc, char **argv){
-	if(2 != argc){
-		printf("Usage: %s [file]\n", argv[0]);
+	if(argc < 3){
+		printf("Usage: %s [source file] [destination file(s)]\n", argv[0]);
 		exit(1);
 	}
 
+	/* yyin is the file descriptor from which flex reads */
 	yyin = fopen(argv[1], "r+");
 	if(NULL == yyin){
-		printf("Couldn't open file\n");
+		printf("Couldn't open file %s\n", argv[1]);
 		exit(1);
 	}
 
+	printf("Parsing source file %s\n\n", argv[1]);
 	yyparse();
 
 	fclose(yyin);
 
+	file_scanned = S_TRUE;
 
-	for(int i = 0; i < wordc; ++i){
-		printf("%s\n", words[i]);
+	for(int i = 2; i < argc; ++i){
+		yyin = fopen(argv[i], "r+");
+		if(NULL == yyin){
+			printf("Couldn't open file %s\n", argv[i]);
+			exit(1);
+		}
+
+		printf("Matches in file %s:\n", argv[i]);
+		yyparse();
+
+		fclose(yyin);
 	}
 
 	for(int i = 0; i < wordc; ++i){

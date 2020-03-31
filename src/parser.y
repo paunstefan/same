@@ -32,24 +32,30 @@ void yyerror(char *s) { printf("Error: %s\n", s); }
 
 %token <string> IDENTIFIER
 
-%type <string> declarator direct_declarator
+%type <string> declarator direct_declarator postfix_expression primary_expression
 
 %start translation_unit
 
 %%
 
 primary_expression
-	: IDENTIFIER
+	: IDENTIFIER 	{ $$ = $1; }
 	| CONSTANT
 	| STRING_LITERAL
 	| '(' expression ')'
 	;
 
 postfix_expression
-	: primary_expression
+	: primary_expression { $$ = $1; }
 	| postfix_expression '[' expression ']'
 	| postfix_expression '(' ')'
+	{
+		process_word($1);
+	}
 	| postfix_expression '(' argument_expression_list ')'
+	{
+		process_word($1);
+	}
 	| postfix_expression '.' IDENTIFIER
 	| postfix_expression PTR_OP IDENTIFIER
 	| postfix_expression INC_OP
@@ -196,6 +202,9 @@ init_declarator_list
 
 init_declarator
 	: declarator
+	{
+		process_word($1);
+	}
 	| declarator '=' initializer
 	;
 
@@ -225,12 +234,12 @@ type_specifier
 struct_or_union_specifier
 	: struct_or_union IDENTIFIER '{' struct_declaration_list '}'
 	{
-		add_word($2);
+		process_word($2);
 	}
 	| struct_or_union '{' struct_declaration_list '}'
 	| struct_or_union IDENTIFIER
 	{
-		add_word($2);
+		process_word($2);
 	}
 	;
 
@@ -297,9 +306,9 @@ direct_declarator
 	| '(' declarator ')'  { $$=$2; }
 	| direct_declarator '[' constant_expression ']'
 	| direct_declarator '[' ']'
-	| direct_declarator '(' parameter_type_list ')'
-	| direct_declarator '(' identifier_list ')'
-	| direct_declarator '(' ')'
+	| direct_declarator '(' parameter_type_list ')'	{ $$=$1; }
+	| direct_declarator '(' identifier_list ')'		{ $$=$1; }
+	| direct_declarator '(' ')'						{ $$=$1; }
 	;
 
 pointer
@@ -441,19 +450,19 @@ external_declaration
 function_definition
 	: declaration_specifiers declarator declaration_list compound_statement
 	{
-		add_word($2);
+		process_word($2);
 	}
 	| declaration_specifiers declarator compound_statement
 	{
-		add_word($2);
+		process_word($2);
 	}
 	| declarator declaration_list compound_statement
 	{
-		add_word($1);
+		process_word($1);
 	}
 	| declarator compound_statement
 	{
-		add_word($1);
+		process_word($1);
 	}
 	;
 
