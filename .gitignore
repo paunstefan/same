@@ -1,4 +1,5 @@
-src/parser.output
+src/clex.c
+same
 f1
 f2
 f3

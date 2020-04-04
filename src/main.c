@@ -5,7 +5,7 @@
 #include "util.h"
 
 /* EXTERNALS */
-extern int yyparse();
+extern int yylex(void);
 extern FILE *yyin;
 
 /* GLOBALS */
@@ -29,7 +29,7 @@ int main(int argc, char **argv){
 	}
 
 	printf("Parsing source file %s\n\n", argv[1]);
-	yyparse();
+	yylex();
 
 	fclose(yyin);
 
@@ -43,7 +43,7 @@ int main(int argc, char **argv){
 		}
 
 		printf("Matches in file %s:\n", argv[i]);
-		yyparse();
+		yylex();
 
 		fclose(yyin);
 	}

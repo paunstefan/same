@@ -2,7 +2,7 @@
 #define SAME_UTIL
 
 /* DEFINES */
-#define S_DEBUG 1
+//#define S_DEBUG 1
 
 /* TYPES */
 typedef enum {
