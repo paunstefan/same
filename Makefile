@@ -1,18 +1,20 @@
 CC=gcc
 CFLAGS=-Wall -ly
-CC_DEBUG_FLAGS=-g
+
+ifdef DEBUG
+	CC_DEBUG_FLAGS=-g
+else
+	CC_DEBUG_FLAGS=
+endif
 
 all: same
 
 src/clex.c: src/clex.l
 	flex -o $@ $^
 
-same: src/main.c src/clex.c src/util.c
-ifdef DEBUG
+same: src/main.c src/clex.c src/util.c src/hashtable.c
 	$(CC) -o $@ $^ $(CFLAGS) $(CC_DEBUG_FLAGS)
-else
-	$(CC) -o $@ $^ $(CFLAGS)
-endif
+
 
 clean:
-	rm  src/clex.c same
+	rm src/clex.c same
