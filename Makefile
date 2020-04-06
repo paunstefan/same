@@ -1,8 +1,8 @@
 CC=gcc
-CFLAGS=-Wall -ly
+CFLAGS=-Wall
 
 ifdef DEBUG
-	CC_DEBUG_FLAGS=-g
+	CC_DEBUG_FLAGS=-g -DS_DEBUG=1
 else
 	CC_DEBUG_FLAGS=
 endif

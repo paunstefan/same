@@ -10,17 +10,18 @@ extern int yylex(void);
 extern FILE *yyin;
 
 /* GLOBALS */
-hashtable_t ht;
+hashtable_t ht_learn;
+hashtable_t ht_match;
 SAME_BOOL_T file_scanned = S_FALSE;
 
 /* FUNCTIONS */
 int main(int argc, char **argv){
 	if(argc < 3){
-		printf("Usage: %s <source file> <destination file(s)>\n", argv[0]);
+		printf("Usage: %s <definitions file> <match file(s)>\n", argv[0]);
 		exit(1);
 	}
 
-	if(init_hashtable(&ht, 97) == FAILED){
+	if(init_hashtable(&ht_learn, 97) == FAILED){
 		printf("Couldn't initialize hashtable\n");
 		exit(1);
 	}
@@ -46,13 +47,21 @@ int main(int argc, char **argv){
 			exit(1);
 		}
 
+		if(init_hashtable(&ht_match, 31) == FAILED){
+			printf("Couldn't initialize hashtable\n");
+			exit(1);
+		}
+
 		printf("Matches in file %s:\n", argv[i]);
 		yylex();
 
 		fclose(yyin);
+
+		free_HT(ht_match);
+		printf("\n");
 	}
 
-	free_HT(ht);
+	free_HT(ht_learn);
 
 	return 0;
 }

@@ -19,11 +19,11 @@ WS  [ \t\v\n\f]
 #include <string.h>
 #include "util.h"
 
-extern void yyerror(char *); 
 void comment();
 %}
 
 %option yylineno
+%option nounput
 
 %%
 "/*"					{ comment(); }
@@ -171,5 +171,6 @@ void comment()
 			if (c == 0) break;
 		}
 	}
-	yyerror("unterminated comment\n");
+	printf("unterminated comment\n");
+
 }

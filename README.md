@@ -16,7 +16,7 @@ First clone or download the repository. Then run `make` to build the program.
 To use it you must give a file to find the definitions, and one or more files to look for matches.
 
 ```
-same <source file> <destination files(s)>
+same <definitions file> <match file(s)>
 ```
 
 ## References
