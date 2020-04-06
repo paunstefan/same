@@ -1,5 +1,10 @@
 CC=gcc
 CFLAGS=-Wall
+PREFIX=/usr/local
+NAME=same
+SRC=src/main.c src/util.c src/hashtable.c
+LEX_FILE=src/clex.l
+LEX_SRC=src/clex.c
 
 ifdef DEBUG
 	CC_DEBUG_FLAGS=-g -DS_DEBUG=1
@@ -7,14 +12,19 @@ else
 	CC_DEBUG_FLAGS=
 endif
 
-all: same
+all: $(NAME)
 
-src/clex.c: src/clex.l
+$(LEX_SRC): $(LEX_FILE)
 	flex -o $@ $^
 
-same: src/main.c src/clex.c src/util.c src/hashtable.c
+$(NAME): $(SRC) $(LEX_SRC)
 	$(CC) -o $@ $^ $(CFLAGS) $(CC_DEBUG_FLAGS)
 
+install: $(NAME)
+	cp $< $(PREFIX)/bin/
+
+uninstall:
+	rm -f $(PREFIX)/bin/$(NAME)
 
 clean:
-	rm src/clex.c same
+	rm $(LEX_SRC) $(NAME)

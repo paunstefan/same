@@ -11,7 +11,14 @@ Requirements:
 * GCC
 * flex
 
-First clone or download the repository. Then run `make` to build the program.
+First clone or download the repository. Then you must build and install the program.
+
+```
+make
+make install
+```
+
+It will be installed by default in the `/usr/local/bin` directory. You might need root access for that.
 
 To use it you must give a file to find the definitions, and one or more files to look for matches.
 
